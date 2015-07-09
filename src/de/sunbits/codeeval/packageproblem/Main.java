@@ -16,16 +16,16 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    final public static String colon = ":";
-    final public static String braces = "\\)\\(";
-    final public static String oBrace = "(";
-    final public static String cBrace = ")";
+    final private static String colon = ":";
+    final private static String braces = "\\)\\(";
+    final private static String oBrace = "(";
+    final private static String cBrace = ")";
 
-    final public static String empty = "";
-    final public static String space = " ";
-    final public static String com = ",";
-    final public static String dollar = "$";
-    final public static String minus = "-";
+    final private static String empty = "";
+    final private static String space = " ";
+    final private static String com = ",";
+    final private static String dollar = "$";
+    final private static String minus = "-";
 
 
     final class Item implements Comparable<Item> {
@@ -44,7 +44,7 @@ public class Main {
         }
 
         @Override
-        public int compareTo(Item o) {
+        public int compareTo(final Item o) {
             if (weight == o.weight) {
                 return cost > o.cost ? 1 : -1;
             } else {
@@ -53,7 +53,7 @@ public class Main {
         }
     }
 
-    public static final String arrayToString(final int[] items, final int num) {
+    private static final String arrayToString(final int[] items, final int num) {
 
 
         final StringBuilder sb = new StringBuilder(num * 2);
@@ -72,7 +72,7 @@ public class Main {
         return sb.toString();
     }
 
-    public final void solve(final String path) {
+    private final void solve(final String path) {
         try {
             int iSize;
             int packageMaxWeight;
