@@ -16,17 +16,6 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    final private static String colon = ":";
-    final private static String braces = "\\)\\(";
-    final private static String oBrace = "(";
-    final private static String cBrace = ")";
-
-    final private static String empty = "";
-    final private static String space = " ";
-    final private static String com = ",";
-    final private static String dollar = "$";
-    final private static String minus = "-";
-
 
     final class Item implements Comparable<Item> {
         int index;
@@ -53,26 +42,23 @@ public class Main {
         }
     }
 
-    private static final String arrayToString(final int[] items, final int num) {
-
-
-        final StringBuilder sb = new StringBuilder(num * 2);
-        int j = 0;
-        for (int i = 1; i < 15; i++) {
-            if (items[i] == 1) {
-                sb.append(i);
-                j++;
-                if (j < num) {
-                    sb.append(com);
-                } else {
-                    break;
-                }
-            }
-        }
-        return sb.toString();
-    }
-
     private final void solve(final String path) {
+
+        final String colon = ":";
+        final String braces = "\\)\\(";
+        final String oBrace = "(";
+        final String cBrace = ")";
+
+        final String empty = "";
+        final String space = " ";
+        final String com = ",";
+        final String dollar = "$";
+        final String minus = "-";
+
+//    final private static boolean[] emptyBolAr = new boolean[0];
+//    final private static byte[] emptyByteAr = new byte[0];
+        final int[] emptyIntAr = new int[0];
+
         try {
             int iSize;
             int packageMaxWeight;
@@ -119,8 +105,9 @@ public class Main {
                 iSize = items.size();
                 int maxCost = 0;
                 float maxWeight = packageMaxWeight;
-                String max = minus;
-                int[] cPack = new int[0];
+
+//                boolean[] cPack = emptyBolAr;
+                int[] cPack = emptyIntAr;
                 int cPacked = 0;
                 for (int i = 0; i < iSize; i++) {
                     for (int j = i; j < iSize; j++) {
@@ -153,7 +140,20 @@ public class Main {
                     }
                 }
                 if (cPacked > 0) {
-                    System.out.println(arrayToString(cPack, cPacked));
+                    final StringBuilder sb = new StringBuilder(cPacked * 2);
+                    int j = 0;
+                    for (int i = 1; i < 15; i++) {
+                        if (cPack[i] == 1) {
+                            sb.append(i);
+                            j++;
+                            if (j < cPacked) {
+                                sb.append(com);
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    System.out.println(sb.toString());
                 } else {
                     System.out.println(minus);
                 }
