@@ -20,46 +20,30 @@ public class Main {
             String line;
             while ((line = inputStream.readLine()) != null) {
 
-                int a1c = 0;
-                int a2c = 0;
                 int ca = 0;
                 char[] chars = line.toCharArray();
-                for (int i = 0; i < chars.length; i++) {
-                    if (a1c == a2c) {
-                        if (chars[i] == a1[a1c]) {
-                            a1c++;
-                        } else if (chars[i] == a2[a2c]) {
-                            a2c++;
-                        }
-                    } else if (a1c > 0) {
-                        if (chars[i] == a1[a1c]) {
-                            a1c++;
-                            if (a1c == 5) {
-                                ca++;
-                                a1c = 1;
-                            }
-                        } else if (a1c == 1 && chars[i] == a1[a1c - 1]) {
+                int size = chars.length;
+                for (int i = 0; i < size - 4; i++) {
 
-                        } else if (chars[i] == a2[a2c]) {
-                            a1c = 0;
-                            a2c++;
-                        } else {
-                            a1c = 0;
+                    int j = 0;
+                    for (; j < 5; j++) {
+                        if (a1[j] != chars[i + j]) {
+                            break;
                         }
-                    } else if (a2c > 0) {
-                        if (chars[i] == a2[a2c]) {
-                            a2c++;
-                            if (a2c == 5) {
-                                ca++;
-                                a2c = 1;
+                    }
+                    if (j == 5) {
+                        ca++;
+                        i += 3;
+                    } else {
+                        j = 0;
+                        for (; j < 5; j++) {
+                            if (a2[j] != chars[i + j]) {
+                                break;
                             }
-                        } else if (a2c == 2 && chars[i] == a2[a2c - 1]) {
-
-                        } else if (chars[i] == a1[a1c]) {
-                            a2c = 0;
-                            a1c++;
-                        } else {
-                            a2c = 0;
+                        }
+                        if (j == 5) {
+                            ca++;
+                            i += 3;
                         }
                     }
                 }
