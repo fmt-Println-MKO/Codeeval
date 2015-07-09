@@ -120,6 +120,8 @@ public class Main {
                 int maxCost = 0;
                 float maxWeight = packageMaxWeight;
                 String max = minus;
+                int[] cPack = new int[0];
+                int cPacked = 0;
                 for (int i = 0; i < iSize; i++) {
                     for (int j = i; j < iSize; j++) {
 
@@ -145,11 +147,16 @@ public class Main {
                         if (packed > 0 && (currentCost > maxCost || (currentCost == maxCost && currentWeight < maxWeight))) {
                             maxCost = currentCost;
                             maxWeight = currentWeight;
-                            max = arrayToString(pack, packed);
+                            cPack = pack;
+                            cPacked = packed;
                         }
                     }
                 }
-                System.out.println(max);
+                if (cPacked > 0) {
+                    System.out.println(arrayToString(cPack, cPacked));
+                } else {
+                    System.out.println(minus);
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
