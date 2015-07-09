@@ -16,11 +16,6 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-
-    final public static PackageCostComparator PACKAGE_COST_COMPARATOR = new PackageCostComparator();
-    final public static ItemCostComparator ITEM_COST_COMPARATOR = new ItemCostComparator();
-    final public static ItemWeightComparator ITEM_WEIGHT_COMPARATOR = new ItemWeightComparator();
-
     final public static String colon = ":";
     final public static String braces = "\\)\\(";
     final public static String oBrace = "(";
@@ -33,7 +28,7 @@ public class Main {
     final public static String minus = "-";
 
 
-    final class Item {
+    final class Item implements Comparable<Item> {
         int index;
         float weight;
         int cost;
@@ -47,95 +42,35 @@ public class Main {
                     ", cost=" + cost +
                     '}';
         }
-    }
-
-    final class Package {
-        final List<Integer> items = new ArrayList<Integer>(15);
-        float weight;
-        int cost;
-
-        public final String getItemListAsString() {
-            Collections.sort(items);
-            return listToString(items);
-        }
-
-//        @Override
-//        public boolean equals(Object o) {
-//            if (this == o) return true;
-//            if (o == null || getClass() != o.getClass()) return false;
-//
-//            Package aPackage = (Package) o;
-//
-//            if (Float.compare(aPackage.weight, weight) != 0) return false;
-//            if (cost != aPackage.cost) return false;
-//            Collections.sort(items);
-//            return items.equals(aPackage.items);
-//
-//        }
-//
-//        @Override
-//        public int hashCode() {
-//            Collections.sort(items);
-//            int result = items.hashCode();
-//            result = 31 * result + (weight != +0.0f ? Float.floatToIntBits(weight) : 0);
-//            result = 31 * result + cost;
-//            return result;
-//        }
 
         @Override
-        public String toString() {
-            return "Package{" +
-                    "items=" + items +
-                    ", weight=" + weight +
-                    ", cost=" + cost +
-                    '}';
+        public int compareTo(Item o) {
+            if (weight == o.weight) {
+                return cost > o.cost ? 1 : -1;
+            } else {
+                return weight > o.weight ? 1 : -1;
+            }
         }
     }
 
-    public static final String listToString(List<Integer> items) {
-        final StringBuilder sb = new StringBuilder();
-        final int size = items.size();
-        for (int i = 0; i < size; i++) {
-            if (i > 0) {
-                sb.append(com);
+    public static final String arrayToString(final int[] items, final int num) {
+
+
+        final StringBuilder sb = new StringBuilder(num * 2);
+        int j = 0;
+        for (int i = 1; i < 15; i++) {
+            if (items[i] == 1) {
+                sb.append(i);
+                j++;
+                if (j < num) {
+                    sb.append(com);
+                } else {
+                    break;
+                }
             }
-            sb.append(items.get(i));
         }
         return sb.toString();
     }
-
-    final public static class ItemCostComparator implements Comparator<Item> {
-
-        @Override
-        public int compare(final Item o1, final Item o2) {
-            return o1.cost > o2.cost ? 1 : -1;
-        }
-    }
-
-    final public static class ItemWeightComparator implements Comparator<Item> {
-
-        @Override
-        public int compare(final Item o1, final Item o2) {
-            if (o1.weight == o2.weight) {
-                return o1.cost > o2.cost ? 1 : -1;
-            } else {
-                return o1.weight > o2.weight ? 1 : -1;
-            }
-        }
-    }
-
-    final public static class PackageCostComparator implements Comparator<Package> {
-
-        @Override
-        public int compare(final Package o1, final Package o2) {
-            if (o1.cost == o2.cost) {
-                return o1.weight < o2.weight ? 1 : -1;
-            } else {
-                return o1.cost > o2.cost ? 1 : -1;
-            }
-        }
-    }
-
 
     public final void solve(final String path) {
         try {
@@ -157,18 +92,20 @@ public class Main {
                 if (packageMaxWeight > 100) {
                     continue;
                 }
-                String[] sitems = packline[1].split(braces);
+                String[] sItems = packline[1].split(braces);
 
-                List<Item> items = new ArrayList<Item>(15);
 
-                int sLenght = sitems.length;
+                int sLength = sItems.length;
 
-                for (int i = 0; i < sLenght; i++) {
-                    String sitem = sitems[i].replace(oBrace, empty);
-                    sitem = sitem.replace(cBrace, empty);
-                    String[] itemData = sitem.split(com);
+                List<Item> items = new ArrayList<>(sLength);
+
+                for (int i = 0; i < sLength; i++) {
+                    String sItem = sItems[i].replace(oBrace, empty);
+                    sItem = sItem.replace(cBrace, empty);
+                    String[] itemData = sItem.split(com);
 
                     final float weight = Float.valueOf(itemData[1]);
+
                     if (weight <= packageMaxWeight) {
                         Item item = new Item();
                         item.index = Integer.valueOf(itemData[0]);
@@ -177,11 +114,7 @@ public class Main {
                         items.add(item);
                     }
                 }
-
-//                Map<String, Package> packageMap = new HashMap<>(sLenght);
-//                final Set<Package> packageSet = new HashSet<>();
-
-                Collections.sort(items, ITEM_WEIGHT_COMPARATOR);
+                Collections.sort(items);
 
                 iSize = items.size();
                 int maxCost = 0;
@@ -190,46 +123,32 @@ public class Main {
                 for (int i = 0; i < iSize; i++) {
                     for (int j = i; j < iSize; j++) {
 
-                        Package aPackage = new Package();
+                        int currentCost = 0;
+                        float currentWeight = 0;
+                        int[] pack = new int[15];
+                        int packed = 0;
                         for (int k = i; k < iSize; k++) {
-
+                            //System.out.println(j + "-" + k);
                             if (k != j) {
                                 final Item item = items.get(k);
-                                if ((aPackage.weight + item.weight) <= packageMaxWeight) {
-                                    aPackage.items.add(item.index);
-                                    aPackage.cost += item.cost;
-                                    aPackage.weight += item.weight;
+                                if ((currentWeight + item.weight) <= packageMaxWeight) {
+                                    pack[item.index] = 1;
+                                    currentCost += item.cost;
+                                    currentWeight += item.weight;
+                                    packed++;
                                 } else {
                                     break;
                                 }
                             }
                         }
 //                        System.out.println(aPackage +"  --  " + aPackage.getItemListAsString());
-                        if (aPackage.items.size() > 0 && (aPackage.cost > maxCost || (aPackage.cost == maxCost && aPackage.weight < maxWeight))) {
-//                            packageMap.put(aPackage.getItemListAsString(), aPackage);
-                            maxCost = aPackage.cost;
-                            maxWeight = aPackage.weight;
-                            max = aPackage.getItemListAsString();
+                        if (packed > 0 && (currentCost > maxCost || (currentCost == maxCost && currentWeight < maxWeight))) {
+                            maxCost = currentCost;
+                            maxWeight = currentWeight;
+                            max = arrayToString(pack, packed);
                         }
-//                        packageSet.add(aPackage);
                     }
                 }
-//                final List<Package> packages = new ArrayList<>(packageMap.size());
-//                final List<Package> packages = new ArrayList<>(packageSet.size());
-
-//                packages.addAll(packageMap.values());
-//                packages.addAll(packageSet);
-
-//                String max = minus;
-//                int maxCost = 0;
-//                for (String k : packageMap.keySet()) {
-//                    Package p = packageMap.get(k);
-//                    if (p.cost > maxCost) {
-//                        maxCost = p.cost;
-//                        max = k;
-//                    }
-//                }
-
                 System.out.println(max);
             }
         } catch (IOException ex) {
