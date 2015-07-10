@@ -1,0 +1,3 @@
+3	Java	Jul 10, 2015 Solved 100	219	6164480	yes 29.472	Share on LinkedIn DELETE
+1	Java	Jul 10, 2015 Solved 100	272	6438912	yes 29.151	Share on LinkedIn DELETE
+2	Go	    Jul 10, 2015 Solved 100	1	4096	yes 34.995	Share on LinkedIn DELETE
