@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * Created by matthiaskoch on 09.07.15.
@@ -34,16 +35,20 @@ public class Main {
 
     private final void solve(final String path) {
 
-        final String colon = ":";
-        final String braces = "\\)\\(";
+        final String comma = ",";
+
+        final Pattern patColon = Pattern.compile(":");
+        final Pattern patBraces = Pattern.compile("\\)\\(");
+        final Pattern patComma = Pattern.compile(comma);
+
         final String oBrace = "(";
         final String cBrace = ")";
 
         final String empty = "";
         final String space = " ";
-        final String com = ",";
         final String dollar = "$";
         final String minus = "-";
+
 
         final int[] emptyIntAr = new int[0];
 
@@ -55,16 +60,15 @@ public class Main {
 
             for (String line : lines) {
                 if (line.length() == 0) {
-                    System.out.println("-");
                     continue;
                 }
                 line = line.replace(space, empty);
-                String[] packline = line.split(colon);
+                String[] packline = patColon.split(line, 0);
                 packageMaxWeight = Integer.valueOf(packline[0]);
                 if (packageMaxWeight > 100) {
                     continue;
                 }
-                String[] sItems = packline[1].split(braces);
+                String[] sItems = patBraces.split(packline[1], 0);
 
                 int sLength = sItems.length;
 
@@ -73,7 +77,7 @@ public class Main {
                 for (int i = 0; i < sLength; i++) {
                     String sItem = sItems[i].replace(oBrace, empty);
                     sItem = sItem.replace(cBrace, empty);
-                    String[] itemData = sItem.split(com);
+                    String[] itemData = patComma.split(sItem, 0);
 
                     final float weight = Float.valueOf(itemData[1]);
 
@@ -136,7 +140,7 @@ public class Main {
                             sb.append(i);
                             j++;
                             if (j < cPacked) {
-                                sb.append(com);
+                                sb.append(comma);
                             } else {
                                 break;
                             }
