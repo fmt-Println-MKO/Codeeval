@@ -32,12 +32,21 @@ public class Main {
                     '}';
         }
 
+//        @Override
+//        public int compareTo(final Item o) {
+//            if (weight == o.weight) {
+//                return cost > o.cost ? 1 : -1;
+//            } else {
+//                return weight > o.weight ? 1 : -1;
+//            }
+//        }
+
         @Override
         public int compareTo(final Item o) {
-            if (weight == o.weight) {
-                return cost > o.cost ? 1 : -1;
-            } else {
+            if (cost == o.cost) {
                 return weight > o.weight ? 1 : -1;
+            } else {
+                return cost < o.cost ? 1 : -1;
             }
         }
     }
@@ -70,9 +79,9 @@ public class Main {
                     System.out.println("-");
                     continue;
                 }
+//                System.out.println(line);
 
                 line = line.replace(space, empty);
-//                System.out.println(line);
                 String[] packline = line.split(colon);
                 packageMaxWeight = Integer.valueOf(packline[0]);
                 if (packageMaxWeight > 100) {
@@ -101,6 +110,7 @@ public class Main {
                     }
                 }
                 Collections.sort(items);
+//                System.out.println("Items: " + items);
 
                 iSize = items.size();
                 int maxCost = 0;
@@ -116,21 +126,36 @@ public class Main {
                         float currentWeight = 0;
                         int[] pack = new int[15];
                         int packed = 0;
+
+                        final Item item1 = items.get(j);
+//                                System.out.println("----" + (currentWeight + item1.weight) +"--- "+ packageMaxWeight + " ----> " + currentCost);
+                        if ((currentWeight + item1.weight) <= packageMaxWeight) {
+                            pack[item1.index] = 1;
+                            currentCost += item1.cost;
+                            currentWeight += item1.weight;
+                            packed++;
+                        } else {
+//                            break;
+                        }
+
+
                         for (int k = i; k < iSize; k++) {
-                            //System.out.println(j + "-" + k);
+//                            System.out.println(j + "-" + k);
                             if (k != j) {
                                 final Item item = items.get(k);
+//                                System.out.println((currentWeight + item.weight) +"--- "+ packageMaxWeight + " ----> " + currentCost);
                                 if ((currentWeight + item.weight) <= packageMaxWeight) {
                                     pack[item.index] = 1;
                                     currentCost += item.cost;
                                     currentWeight += item.weight;
                                     packed++;
                                 } else {
-                                    break;
+//                                    break;
                                 }
                             }
                         }
 //                        System.out.println(aPackage +"  --  " + aPackage.getItemListAsString());
+//                        System.out.println(packed +"-- "+ currentCost +" -- "+ maxCost +" :--------: " + currentWeight +" :-: "+ maxWeight);
                         if (packed > 0 && (currentCost > maxCost || (currentCost == maxCost && currentWeight < maxWeight))) {
                             maxCost = currentCost;
                             maxWeight = currentWeight;
