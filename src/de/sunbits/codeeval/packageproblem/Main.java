@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,37 +19,16 @@ import java.util.logging.Logger;
 public class Main {
 
 
-    final class Item implements Comparable<Item> {
-        int index;
-        float weight;
-        int cost;
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
 
-
-        @Override
-        public String toString() {
-            return "Item{" +
-                    "index=" + index +
-                    ", weight=" + weight +
-                    ", cost=" + cost +
-                    '}';
-        }
-
-//        @Override
-//        public int compareTo(final Item o) {
-//            if (weight == o.weight) {
-//                return cost > o.cost ? 1 : -1;
-//            } else {
-//                return weight > o.weight ? 1 : -1;
-//            }
-//        }
-
-        @Override
-        public int compareTo(final Item o) {
-            if (cost == o.cost) {
-                return weight > o.weight ? 1 : -1;
-            } else {
-                return cost < o.cost ? 1 : -1;
-            }
+        Main pp = new Main();
+        if (args.length != 1) {
+            System.err.println("no file specified!!");
+        } else {
+            pp.solve(args[0]);
         }
     }
 
@@ -64,8 +45,6 @@ public class Main {
         final String dollar = "$";
         final String minus = "-";
 
-//    final private static boolean[] emptyBolAr = new boolean[0];
-//    final private static byte[] emptyByteAr = new byte[0];
         final int[] emptyIntAr = new int[0];
 
         try {
@@ -79,8 +58,6 @@ public class Main {
                     System.out.println("-");
                     continue;
                 }
-//                System.out.println(line);
-
                 line = line.replace(space, empty);
                 String[] packline = line.split(colon);
                 packageMaxWeight = Integer.valueOf(packline[0]);
@@ -88,7 +65,6 @@ public class Main {
                     continue;
                 }
                 String[] sItems = packline[1].split(braces);
-
 
                 int sLength = sItems.length;
 
@@ -110,13 +86,11 @@ public class Main {
                     }
                 }
                 Collections.sort(items);
-//                System.out.println("Items: " + items);
 
                 iSize = items.size();
                 int maxCost = 0;
                 float maxWeight = packageMaxWeight;
 
-//                boolean[] cPack = emptyBolAr;
                 int[] cPack = emptyIntAr;
                 int cPacked = 0;
                 for (int i = 0; i < iSize; i++) {
@@ -128,34 +102,24 @@ public class Main {
                         int packed = 0;
 
                         final Item item1 = items.get(j);
-//                                System.out.println("----" + (currentWeight + item1.weight) +"--- "+ packageMaxWeight + " ----> " + currentCost);
                         if ((currentWeight + item1.weight) <= packageMaxWeight) {
                             pack[item1.index] = 1;
                             currentCost += item1.cost;
                             currentWeight += item1.weight;
                             packed++;
-                        } else {
-//                            break;
                         }
 
-
                         for (int k = i; k < iSize; k++) {
-//                            System.out.println(j + "-" + k);
                             if (k != j) {
                                 final Item item = items.get(k);
-//                                System.out.println((currentWeight + item.weight) +"--- "+ packageMaxWeight + " ----> " + currentCost);
                                 if ((currentWeight + item.weight) <= packageMaxWeight) {
                                     pack[item.index] = 1;
                                     currentCost += item.cost;
                                     currentWeight += item.weight;
                                     packed++;
-                                } else {
-//                                    break;
                                 }
                             }
                         }
-//                        System.out.println(aPackage +"  --  " + aPackage.getItemListAsString());
-//                        System.out.println(packed +"-- "+ currentCost +" -- "+ maxCost +" :--------: " + currentWeight +" :-: "+ maxWeight);
                         if (packed > 0 && (currentCost > maxCost || (currentCost == maxCost && currentWeight < maxWeight))) {
                             maxCost = currentCost;
                             maxWeight = currentWeight;
@@ -188,16 +152,28 @@ public class Main {
         }
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    final class Item implements Comparable<Item> {
+        int index;
+        float weight;
+        int cost;
 
-        Main pp = new Main();
-        if (args.length != 1) {
-            System.err.println("no file specified!!");
-        } else {
-            pp.solve(args[0]);
+
+        @Override
+        public String toString() {
+            return "Item{" +
+                    "index=" + index +
+                    ", weight=" + weight +
+                    ", cost=" + cost +
+                    '}';
+        }
+
+        @Override
+        public int compareTo(final Item o) {
+            if (cost == o.cost) {
+                return weight > o.weight ? 1 : -1;
+            } else {
+                return cost < o.cost ? 1 : -1;
+            }
         }
     }
 }

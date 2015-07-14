@@ -1,1 +1,1 @@
-1	Java	Jul 09, 2015 Partially 90	672	5898240	yes 74.319 TRY AGAIN DELETE
+1	Java	Jul 14, 2015 Solved 100	771	6164480	yes 81.444	Share on LinkedIn DELETE
